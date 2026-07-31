@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // 1. 创建场景
 const scene = new THREE.Scene();
@@ -23,6 +24,18 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 // 将渲染器的canvas元素添加到页面中
 document.body.appendChild(renderer.domElement);
 
+// 添加坐标系辅助线
+const axesHelper = new THREE.AxesHelper(2);
+scene.add(axesHelper);
+
+// 添加轨道控制器
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.minDistance = 2;
+controls.maxDistance = 20;
+controls.update();
+
 // 第二部分
 // 1. 创建一个立方体几何体 (宽, 高, 深度)
 const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -46,6 +59,7 @@ function animate() {
     requestAnimationFrame(animate);
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
+    controls.update();
     renderer.render(scene, camera);
 }
 
